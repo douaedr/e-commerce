@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Accueil — Our Store{% endblock %}
+{% block body %}
+<div class="bg-primary text-white py-5">
+    <div class="container">
+        <h1 class="display-3 fw-bold">Welcome to Our Store</h1>
+        <p class="lead">Découvrez nos produits à prix imbattables.</p>
+        <a href="{{ path('app_product_list') }}" class="btn btn-light btn-lg me-2">Shop Now</a>
+        <a href="{{ path('app_category_browse') }}" class="btn btn-outline-light btn-lg">Catégories</a>
+    </div>
+</div>
+{% endblock %}

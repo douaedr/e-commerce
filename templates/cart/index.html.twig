@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% block title %}Panier{% endblock %}
+{% block body %}
+<div class="container my-5">
+    <h1 class="mb-4">Mon Panier</h1>
+
+    {% if items is empty %}
+        <div class="alert alert-info">Votre panier est vide. <a href="{{ path('app_product_list') }}">Continuer les achats</a></div>
+    {% else %}
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Sous-total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>${{ item.product.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td class="fw-bold">${{ item.subtotal }}</td>
+                        <td>
+                            <form action="{{ path('app_cart_remove', {id: item.product.id}) }}" method="POST">
+                                <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <form action="{{ path('app_cart_clear') }}" method="POST">
+                <button class="btn btn-outline-secondary">Vider le panier</button>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white"><h5 class="mb-0">Résumé</h5></div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total :</strong>
+                        <strong class="text-success">${{ total }}</strong>
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-success btn-lg">Commander</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
