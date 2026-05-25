@@ -1,10 +1,13 @@
 <?php
 namespace App\Cart;
 
+use App\Entity\Cart;
+use App\Entity\CartItem;
+
 interface CartInterface
 {
-    public function add(int $productId, int $quantity): void;
-    public function remove(int $productId): void;
-    public function getItems(): array;
-    public function clear(): void;
-} 
+    public function add(CartItem $item, Cart $cart): Cart;
+    public function remove(CartItem $item, Cart $cart): Cart;
+    public function getCart(string $identifier): Cart;
+    public function clearCart(string $identifier): void;
+}

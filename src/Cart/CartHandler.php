@@ -1,6 +1,8 @@
 <?php
 namespace App\Cart;
 
+use App\Entity\Cart;
+use App\Entity\CartItem;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CartHandler
@@ -10,9 +12,23 @@ class CartHandler
         private CartInterface $cart
     ) {}
 
-    public function add(int $productId, int $quantity): void { $this->cart->add($productId, $quantity); }
-    public function remove(int $productId): void { $this->cart->remove($productId); }
-    public function getItems(): array { return $this->cart->getItems(); }
-    public function clear(): void { $this->cart->clear(); }
-    public function getCount(): int { return array_sum($this->getItems()); }
+    public function add(CartItem $item, Cart $cart): Cart
+    {
+        return $this->cart->add($item, $cart);
+    }
+
+    public function remove(CartItem $item, Cart $cart): Cart
+    {
+        return $this->cart->remove($item, $cart);
+    }
+
+    public function getCart(string $identifier): Cart
+    {
+        return $this->cart->getCart($identifier);
+    }
+
+    public function clearCart(string $identifier): void
+    {
+        $this->cart->clearCart($identifier);
+    }
 }

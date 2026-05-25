@@ -1,6 +1,8 @@
 <?php
 namespace App\Cart;
 
+use App\Entity\Cart;
+use App\Entity\CartItem;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class SessionCart implements CartInterface
@@ -14,27 +16,34 @@ class SessionCart implements CartInterface
         return $this->requestStack->getSession();
     }
 
-    public function add(int $productId, int $quantity): void
+    public function getCart(string $identifier): Cart
     {
-        $cart = $this->getItems();
-        $cart[$productId] = ($cart[$productId] ?? 0) + $quantity;
-        $this->getSession()->set(self::SESSION_KEY, $cart);
+        $cart = $this->getSession()->get(self::SESSION_KEY . '_' . $identifier);
+        if ($cart === null) {
+            $cart = new Cart();
+            $cart->setCreatedAt(new \DateTime());
+        }
+        return $cart;
     }
 
-    public function remove(int $productId): void
+    public function add(CartItem $item, Cart $cart): Cart
     {
-        $cart = $this->getItems();
-        unset($cart[$productId]);
-        $this->getSession()->set(self::SESSION_KEY, $cart);
+        $identifier = $this->getSession()->getId();
+        $cart->addCartItem($item);
+        $this->getSession()->set(self::SESSION_KEY . '_' . $identifier, $cart);
+        return $cart;
     }
 
-    public function getItems(): array
+    public function remove(CartItem $item, Cart $cart): Cart
     {
-        return $this->getSession()->get(self::SESSION_KEY, []);
+        $identifier = $this->getSession()->getId();
+        $cart->removeCartItem($item);
+        $this->getSession()->set(self::SESSION_KEY . '_' . $identifier, $cart);
+        return $cart;
     }
 
-    public function clear(): void
+    public function clearCart(string $identifier): void
     {
-        $this->getSession()->remove(self::SESSION_KEY);
+        $this->getSession()->remove(self::SESSION_KEY . '_' . $identifier);
     }
 }
