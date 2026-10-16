@@ -8,4 +8,3 @@ E-commerce web application built with PHP and the Symfony framework.
 composer install
 ```
 
-<!-- TO VERIFY: database setup, environment variables, features -->
